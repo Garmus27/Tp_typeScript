@@ -1,0 +1,93 @@
+import { Cliente } from "./Cliente.js";
+import { Articulo } from "./Articulo.js";
+import { Factura } from "./Factura.js";
+import { DetalleFactura } from "./DetalleFactura.js";
+import { TipoPago } from "./TipoPago.js";
+
+
+const cliente1 = new Cliente("El Buen Sabor S.A.", 1, 30-12345678-9);
+
+const articulo1 = new Articulo(101, "Pizza Muzzarella", 1500, "Unidad");
+const articulo2 = new Articulo(102, "Hamburguesa Clásica", 2000, "Unidad");
+const articulo3 = new Articulo(103, "Coca-Cola 1.5L", 500, "Unidad");
+const articulo4 = new Articulo(104, "Ensalada César", 1800, "Unidad");
+const articulo5 = new Articulo(105, "Papas Fritas", 800, "Unidad");
+
+const factura1 = new Factura("A", 1, 150, TipoPago.E, 0, 0, new Date());
+const factura2 = new Factura("B", 2, 0, TipoPago.TC, 0, 0, new Date());
+const factura3 = new Factura("C", 3, 50, TipoPago.TR, 0, 0, new Date());
+
+factura1.$cliente = cliente1;
+factura2.$cliente = cliente1;
+factura3.$cliente = cliente1;
+
+const detalle1_1 = new DetalleFactura(2, 0); 
+detalle1_1.$articulo = articulo1; 
+detalle1_1.calcularSubtotal();
+detalle1_1.$factura = factura1; 
+
+const detalle1_2 = new DetalleFactura(1, 0); 
+detalle1_2.$articulo = articulo3; 
+detalle1_2.calcularSubtotal();
+detalle1_2.$factura = factura1; 
+
+const detalle2_1 = new DetalleFactura(3, 0); 
+detalle2_1.$articulo = articulo2; 
+detalle2_1.calcularSubtotal();
+detalle2_1.$factura = factura2;
+
+const detalle2_2 = new DetalleFactura(1, 0); 
+detalle2_2.$articulo = articulo5; 
+detalle2_2.calcularSubtotal();
+detalle2_2.$factura = factura2;
+
+const detalle3_1 = new DetalleFactura(1, 0); 
+detalle3_1.$articulo = articulo4; 
+detalle3_1.calcularSubtotal();
+detalle3_1.$factura = factura3;
+
+const detalle3_2 = new DetalleFactura(2, 0); 
+detalle3_2.$articulo = articulo3; 
+detalle3_2.calcularSubtotal();
+detalle3_2.$factura = factura3;
+
+factura1.calcularTotalItems();
+factura1.calcularTotalFinal();
+
+factura2.calcularTotalItems();
+factura2.calcularTotalFinal();
+
+factura3.calcularTotalItems();
+factura3.calcularTotalFinal();
+
+const output = document.getElementById("outputB"); 
+
+if (output) {
+    output.innerHTML += `<h2>Cliente Principal</h2>`;
+    output.innerHTML += `<p>Razón Social: <strong>${cliente1.$razonSocial}</strong></p>`;
+    output.innerHTML += `<hr>`;
+
+    const facturas = [factura1, factura2, factura3];
+
+    facturas.forEach((factura, index) => {
+        output.innerHTML += `<h3>Factura #${index + 1} (${factura.$letra}-${factura.$numero})</h3>`;
+        output.innerHTML += `<p>Fecha: ${factura.$fecha.toLocaleDateString()}, Tipo de Pago: ${factura.$tipoPago}</p>`;
+        output.innerHTML += `<p>Recargo: $${factura.$recargo}, Total Ítems: $${factura.$totalItems}, Total Final: <strong>$${factura.$totalFinal}</strong></p>`;
+        
+        const detalles = factura.$detalles || []; 
+        
+        detalles.forEach((detalle, i) => {
+            output.innerHTML += `<p style="margin-left: 20px;"> Detalle #${i + 1}: ${detalle.$cantidad}x ${detalle.$articulo?.$denominacion} (Subtotal: $${detalle.$subTotal})</p>`;
+        });
+        output.innerHTML += `<hr>`;
+    });
+
+    const totalEfectivo = factura1.$totalFinal;
+    const totalTarjetaCredito = factura2.$totalFinal;
+    const totalTransferencia = factura3.$totalFinal;
+
+    output.innerHTML += `<h2>Resumen de Facturación por Pago</h2>`;
+    output.innerHTML += `<p>Total en Efectivo (${TipoPago.E}): <strong>$${totalEfectivo}</strong></p>`;
+    output.innerHTML += `<p>Total en Tarjeta de Crédito (${TipoPago.TC}): <strong>$${totalTarjetaCredito}</strong></p>`;
+    output.innerHTML += `<p>Total en Transferencia (${TipoPago.TR}): <strong>$${totalTransferencia}</strong></p>`;
+}

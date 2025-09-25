@@ -1,0 +1,19 @@
+{
+  "name": "proyecto_ts",
+  "version": "1.0.0",
+  "description": "Proyecto TypeScript con nodemon y dos m\u00f3dulos",
+  "main": "index.js",
+  "scripts": {
+    "start:A": "nodemon --exec ts-node \"modelo_A/TestA.ts\"",
+    "start:B": "nodemon --exec ts-node \"modelo_B/TestB.ts\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.3"
+  }
+}

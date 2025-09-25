@@ -1,0 +1,8 @@
+{
+  "watch": [
+    "modelo_A",
+    "modelo_B"
+  ],
+  "ext": "ts",
+  "exec": "ts-node \"modelo_A/TestA.ts\""
+}
